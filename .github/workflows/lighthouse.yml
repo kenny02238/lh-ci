@@ -12,7 +12,7 @@ jobs:
           node-version: 16.x
       - name: pnpm install, build
         run: |
-          pnpm install
+          npm install
           pnpm run build
       - name: run Lighthouse CI
         run: |
