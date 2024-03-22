@@ -30,7 +30,7 @@ jobs:
 
       - name: Extract report URL
         id: extract_report_url
-        run: echo "::set-output name=url::$(lhci healthcheck --url=https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/ | grep -o 'https://[^\"]*')"
+        run: echo "::set-output name=url::$(pnpm lhci healthcheck --url=https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/ | grep -o 'https://[^\"]*')"
 
       - name: Comment on Pull Request
         uses: actions/github-script@v4

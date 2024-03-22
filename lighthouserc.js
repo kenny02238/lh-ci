@@ -4,7 +4,7 @@ module.exports = {
       target: "temporary-public-storage",
     },
     collect: {
-      staticDistDir: ".next",
+      staticDistDir: ".next/server/app/index.html",
     },
   },
 };
