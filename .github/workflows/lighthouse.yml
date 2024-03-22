@@ -36,7 +36,7 @@ jobs:
       #     echo "GitHub Token: $GH_TOKEN"  # 显示环境变量，以便调试
 
       - name: Run Lighthouse CI
-        run: pnpm ci:lighthouse --token=$GH_TOKEN
+        run: pnpm ci:lighthouse
         env:
           GH_TOKEN: ${{ secrets.LH_CI_TEST }}
 
