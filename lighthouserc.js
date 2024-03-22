@@ -4,9 +4,7 @@ module.exports = {
       // collect options here
       staticDistDir: ".next/server/app",
     },
-    assert: {
-      // assert options here
-    },
+
     upload: {
       // upload options here
       target: "temporary-public-storage",
