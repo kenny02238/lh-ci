@@ -6,7 +6,6 @@ module.exports = {
     },
     assert: {
       // assert options here
-      preset: "lighthouse:no-pwa",
     },
     upload: {
       // upload options here
