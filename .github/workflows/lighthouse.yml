@@ -28,23 +28,8 @@ jobs:
       - name: Run Lighthouse CI
         run: pnpm ci:lighthouse
 
-      - name: Extract report URL
-        id: extract_report_url
-        run: |
-          echo "URL=${$(pnpm lhci healthcheck --url=https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/ | grep -o 'https://[^\"]*')}" >> $GITHUB_ENV
-
-      - name: Comment on Pull Request
-        uses: actions/github-script@v4
+      - name: Download Lighthouse report
+        uses: actions/download-artifact@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const url = process.env.URL;
-            const owner = process.env.GITHUB_REPOSITORY.split("/")[0];
-            const repo = process.env.GITHUB_REPOSITORY.split("/")[1];
-            const pr_number = github.event.pull_request.number;
-            github.rest.issues.createComment({
-              issue_number: pr_number,
-              owner: owner,
-              repo: repo,
-              body: `Lighthouse CI report is available [here](${url})`
-            })
+          name: lighthouse-report
+          path: reports
