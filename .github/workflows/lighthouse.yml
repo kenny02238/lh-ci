@@ -12,9 +12,9 @@ jobs:
           node-version: 16.x
       - name: pnpm install, build
         run: |
-          npm install
-          npm run build
+          pnpm install
+          pnpm run build
       - name: run Lighthouse CI
         run: |
-          npm install -g @lhci/cli@0.13.x
+          pnpm install -g @lhci/cli@0.13.x
           lhci autorun
