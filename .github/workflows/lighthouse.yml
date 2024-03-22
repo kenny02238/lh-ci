@@ -29,7 +29,9 @@ jobs:
           pnpm build
 
       - name: Run Lighthouse CI
-        run: pnpm ci:lighthouse
+        env:
+          GH_TOKEN: ${{ secrets.LH_CI_TEST }} # 引用 GitHub 密钥
+        run: pnpm ci:lighthouse --token=$GH_TOKEN
 
       # - name: Download Lighthouse report
       #   uses: actions/download-artifact@v2
