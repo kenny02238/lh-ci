@@ -16,12 +16,13 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const message = 'Hello from GitHub Actions!';
-            github.rest.issues.createComment({
+            github.issues.createComment({
               issue_number: context.payload.pull_request.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: message
             })
+
       # - name: yarn install, build
       #   run: |
       #     yarn install
