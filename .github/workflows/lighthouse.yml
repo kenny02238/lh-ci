@@ -17,4 +17,5 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: Lighthouse reports
+          with: ${{ secrets.LH_CI }}
           path: /tmp/artifacts
