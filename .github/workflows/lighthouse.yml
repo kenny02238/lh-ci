@@ -16,6 +16,13 @@ jobs:
           yarn install
           yarn run build
 
+      - name: Get main branch info
+        id: main-info
+        run: |
+          git fetch origin main
+          latest_commit=$(git rev-parse origin/main)
+          echo "::set-output name=main-commit::$latest_commit"
+
       - name: run Lighthouse CI
         run: |
           yarn lhci autorun --upload.target=filesystem --upload.outputDir=./test
