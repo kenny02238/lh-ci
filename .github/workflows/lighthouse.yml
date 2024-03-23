@@ -18,6 +18,23 @@ jobs:
         run: |
           yarn install
           yarn run build
-      - name: Run Lighthouse CI
-        run: |
-          yarn lhci autorun
+      - name: Run Lighthouse CI and add comment to PR
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          env:
+          LHCI_COMMENT_URL: https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/comments
+          run: |
+            # Run Lighthouse CI and capture the results
+            # Replace this with the actual command to run Lighthouse CI
+            lhci autorun > lighthouse_report.txt
+
+            # Read the Lighthouse report
+            report=$(<lighthouse_report.txt)
+
+            # Add the Lighthouse report as a comment to the PR
+            echo "$report" | jq -R --slurp '{body: .}' |
+              curl -XPOST -d @- \
+                -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                -H "Content-Type: application/json" \
+                "${LHCI_COMMENT_URL}"
