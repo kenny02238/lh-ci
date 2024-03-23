@@ -1,40 +1,16 @@
 name: Lighthouse CI
-
-on:
-  pull_request:
-    types: [opened, synchronize]
-
+on: push
 jobs:
-  lhci:
-    name: Lighthouse
+  lighthouse:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 20.x
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Audit URLs using Lighthouse
+        uses: treosh/lighthouse-ci-action@v11
         with:
-          node-version: 20.x
-      - name: yarn install, build
-        run: |
-          yarn install
-          yarn run build
-      - name: Run Lighthouse CI and add comment to PR
-        uses: actions/github-script@v4
-        with:
-          github-token: ${{ secrets.LH_CI }}
-          env:
-          LHCI_COMMENT_URL: https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/comments
-          script: |
-            # Run Lighthouse CI and capture the results
-            # Replace this with the actual command to run Lighthouse CI
-            lhci autorun > lighthouse_report.txt
-
-            # Read the Lighthouse report
-            report=$(<lighthouse_report.txt)
-
-            # Add the Lighthouse report as a comment to the PR
-            echo "$report" | jq -R --slurp '{body: .}' |
-              curl -XPOST -d @- \
-                -H "Authorization: token ${{ secrets.LH_CI }}" \
-                -H "Content-Type: application/json" \
-                "${LHCI_COMMENT_URL}"
+          urls: |
+            https://example.com/
+            https://example.com/blog
+          budgetPath: ./budget.json # test performance budgets
+          uploadArtifacts: true # save results as an action artifacts
+          temporaryPublicStorage: true # upload lighthouse report to the temporary storage
