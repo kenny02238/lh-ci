@@ -13,7 +13,7 @@ jobs:
       - name: Add information to PR
         uses: actions/github-script@v4
         with:
-          github-token: ${{ secrets.LH_CI }}
+          github-token: ${{ secrets.TEST }}
           script: |
             const message = 'Hello from GitHub Actions!';
             github.issues.createComment({
