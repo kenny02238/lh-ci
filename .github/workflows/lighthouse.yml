@@ -10,10 +10,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20.x
-      - name: npm install, build
+      - name: yarn install, build
         run: |
-          npm install
-          npm run build
+          yarn install
+          yarn run build
       - name: run Lighthouse CI
         run: |
-          lhci autorun
+          yarn lhci autorun
