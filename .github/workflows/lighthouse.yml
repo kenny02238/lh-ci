@@ -10,25 +10,31 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20.x
+
+      - name: yarn install, build
+        run: |
+          yarn install
+          yarn run build
+
+      - name: run Lighthouse CI
+        run: |
+          yarn lhci autorun --upload.target=filesystem
+
+      - name: Read Lighthouse report
+        id: read-report
+        run: echo "::set-output name=report::$(cat lighthouse_report.json)"
+
       - name: Add information to PR
         uses: actions/github-script@v4
         with:
           github-token: ${{ secrets.TEST }}
           script: |
-            const message = 'Hello from GitHub Actions!';
+            const message = `Lighthouse Report: \n${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/lighthouse_report.json`;
             github.issues.createComment({
               issue_number: context.payload.pull_request.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: message
             })
-
-      # - name: yarn install, build
-      #   run: |
-      #     yarn install
-      #     yarn run build
-      # - name: run Lighthouse CI
-      #   run: |
-      #     yarn lhci autorun
 
 # Path: .github/workflows/lighthouse.yml
