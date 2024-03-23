@@ -46,6 +46,7 @@ jobs:
           github-token: ${{ secrets.TEST }}
           script: |
             const fcpScore = process.env['fcp-score'];
+            console.log(process.env);
             const message = `First Contentful Paint Score: ${fcpScore}`;
             github.issues.createComment({
               issue_number: context.payload.pull_request.number,
