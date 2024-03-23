@@ -19,29 +19,28 @@ jobs:
       - name: run Lighthouse CI
         run: |
           yarn lhci autorun --upload.target=filesystem --upload.outputDir=./test
-      - name: Check if JSON report exists
-        run: |
-          # 检查是否存在 lighthouse_report.json 文件
-          if [ -f "lighthouse_report.json" ]; then
-            echo "JSON report exists"
-          else
-            echo "JSON report does not exist"
-            # 可以选择在此处添加一些逻辑来处理文件不存在的情况
-          fi
 
       - name: List generated files
         run: ls ./test
 
-      - name: Read Lighthouse report
-        id: read-report
-        run: echo "::set-output name=report::$(cat lighthouse_report.json)"
+      - name: Get JSON filename
+        id: get-json-filename
+        run: echo "::set-output name=filename::$(ls ./test/*.report.json)"
+
+      - name: Extract first-contentful-paint score
+        id: extract-fcp-score
+        run: |
+          filename=$(echo "${{ steps.get-json-filename.outputs.filename }}")
+          fcp_score=$(jq -r '.audits["first-contentful-paint"].score' "${filename}")
+          echo "::set-output name=fcp-score::${fcp_score}"
 
       - name: Add information to PR
         uses: actions/github-script@v4
         with:
           github-token: ${{ secrets.TEST }}
           script: |
-            const message = `Lighthouse Report: \n${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/blob/${process.env.GITHUB_SHA}/lighthouse_report.json`;
+            const fcpScore = process.env['FCP_SCORE'];
+            const message = `First Contentful Paint Score: ${fcpScore}`;
             github.issues.createComment({
               issue_number: context.payload.pull_request.number,
               owner: context.repo.owner,
