@@ -47,8 +47,8 @@ jobs:
           github-token: ${{ secrets.TEST }}
           script: |
             const fcpScore = process.env["FCP_SCORE"];
-            console.log(process.env);
-            const message = `First Contentful Paint Score: ${fcpScore}`;
+            const icon = '<svg class="octicon octicon-flame" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M8 1.5c.832 0 1.5.5 1.5 1.228 0 .876-.68 2.017-2.029 3.486l-.471.505a.5.5 0 0 1-.942 0l-.471-.505C6.18 4.745 5.5 3.605 5.5 2.728 5.5 2 6.168 1.5 7 1.5zM8 14c-.5-.5-.878-.972-1.134-1.418C6.701 12.64 6.5 12.088 6.5 11.5c0-.723.495-1.5 1-1.5s1 .777 1 1.5c0 .588-.202 1.139-.366 1.082A1.978 1.978 0 0 1 8 14zm-4.5-6a2.5 2.5 0 0 1 5 0h-5z"/></svg>';
+            const message = `First Contentful Paint Score:${icon} ${fcpScore} `;
             github.issues.createComment({
               issue_number: context.payload.pull_request.number,
               owner: context.repo.owner,
