@@ -24,8 +24,6 @@ jobs:
       - name: Get last Lighthouse score
         id: last_lighthouse_score
         run: |
-          # Add the script to fetch the last Lighthouse score
-          # Example: fetch the last Lighthouse score from the merged commit
           last_score=$(git show --no-patch --format="%s" HEAD^ | grep -oE "\[Lighthouse: [0-9]+\]" | grep -oE "[0-9]+")
           echo "::set-output name=last_score::$last_score"
       - name: Comment on Pull Request
