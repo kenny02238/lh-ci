@@ -38,7 +38,7 @@ jobs:
           echo "::set-output name=fcp-score::${fcp_score}"
 
       - name: Show FCP score
-        run: echo "test ${ steps.extract-fcp-score.outputs.fcp-score }"
+        run: echo "test ${{ steps.extract-fcp-score.outputs.fcp-score }}"
 
       - name: Add information to PR
         uses: actions/github-script@v4
