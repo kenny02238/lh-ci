@@ -1,16 +1,21 @@
-name: Lighthouse CI
-on: push
+name: CI
+on: [pull_request]
 jobs:
-  lighthouse:
+  lhci:
+    name: Lighthouse
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Audit URLs using Lighthouse
-        uses: treosh/lighthouse-ci-action@v11
+      - uses: actions/checkout@v3
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v3
         with:
-          urls: |
-            https://example.com/
-            https://example.com/blog
-          budgetPath: ./budget.json # test performance budgets
-          uploadArtifacts: true # save results as an action artifacts
-          temporaryPublicStorage: true # upload lighthouse report to the temporary storage
+          node-version: 20.x
+      - name: yarn install, build
+        run: |
+          yarn install
+          yarn run build
+      - name: run Lighthouse CI
+        run: |
+          yarn lhci autorun
+
+# Path: .github/workflows/lighthouse.yml

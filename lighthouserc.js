@@ -5,7 +5,6 @@ module.exports = {
       numberOfRuns: 1,
       startServerCommand: "yarn dev",
       url: ["http://localhost:3000/"],
-      staticDistDir: ".next/server/app",
     },
 
     upload: {
