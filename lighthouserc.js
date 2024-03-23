@@ -6,8 +6,8 @@ module.exports = {
       startServerCommand: "yarn dev",
       url: ["http://localhost:3000/"],
       settings: {
-        output: "json",
-        outputPath: "./test", // 自定义输出路径
+        output: "json", // 输出为 JSON 格式
+        outputPath: "./lighthouse_report.json", // 自定义输出路径
       },
     },
 
