@@ -18,7 +18,7 @@ jobs:
 
       - name: run Lighthouse CI
         run: |
-          yarn lhci autorun --upload.target=filesystem
+          yarn lhci autorun
       - name: Check if JSON report exists
         run: |
           # 检查是否存在 lighthouse_report.json 文件
