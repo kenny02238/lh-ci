@@ -5,6 +5,10 @@ module.exports = {
       numberOfRuns: 1,
       startServerCommand: "yarn dev",
       url: ["http://localhost:3000/"],
+      settings: {
+        output: "json",
+        outputPath: "./test", // 自定义输出路径
+      },
     },
 
     upload: {
