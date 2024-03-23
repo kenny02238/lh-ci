@@ -1,22 +1,21 @@
-name: CI
-on: [push]
+name: Lighthouse CI
+
+on: [pull_request]
+
 jobs:
-  lhci:
-    name: Lighthouse
+  lighthouse-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 20.x
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@master
+      - run: mkdir /tmp/artifacts
+      - name: Run Lighthouse
+        uses: foo-software/lighthouse-check-action@master
         with:
-          node-version: 20.x
-      - name: yarn install, build
-        run: |
-          yarn install
-          yarn run build
-      - name: run Lighthouse CI
-        run: |
-          yarn lhci autorun
-
-# Path: .github/workflows/lighthouse.yml
-# This is a basic workflow to help you get started with Actions
+          outputDirectory: /tmp/artifacts
+          urls: "https://www.foo.software,https://www.foo.software/contact"
+      - name: Upload artifacts
+        uses: actions/upload-artifact@master
+        with:
+          name: Lighthouse reports
+          with: ${{ secrets.LH_CI }}
+          path: /tmp/artifacts
