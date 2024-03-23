@@ -19,6 +19,15 @@ jobs:
       - name: run Lighthouse CI
         run: |
           yarn lhci autorun --upload.target=filesystem
+      - name: Check if JSON report exists
+        run: |
+          # 检查是否存在 lighthouse_report.json 文件
+          if [ -f "lighthouse_report.json" ]; then
+            echo "JSON report exists"
+          else
+            echo "JSON report does not exist"
+            # 可以选择在此处添加一些逻辑来处理文件不存在的情况
+          fi
 
       - name: Read Lighthouse report
         id: read-report
