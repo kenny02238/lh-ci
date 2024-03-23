@@ -27,6 +27,9 @@ jobs:
         id: get-json-filename
         run: echo "::set-output name=filename::$(ls ./test/*.report.json)"
 
+      - name: Show JSON filename
+        run: echo "${{ steps.get-json-filename.outputs.filename }}"
+
       - name: Extract first-contentful-paint score
         id: extract-fcp-score
         run: |
@@ -34,12 +37,15 @@ jobs:
           fcp_score=$(jq -r '.audits["first-contentful-paint"].score' "${filename}")
           echo "::set-output name=fcp-score::${fcp_score}"
 
+      - name: Show FCP score
+        run: echo "test ${ steps.extract-fcp-score.outputs.fcp-score }"
+
       - name: Add information to PR
         uses: actions/github-script@v4
         with:
           github-token: ${{ secrets.TEST }}
           script: |
-            const fcpScore = process.env['FCP_SCORE'];
+            const fcpScore = process.env['fcp-score'];
             const message = `First Contentful Paint Score: ${fcpScore}`;
             github.issues.createComment({
               issue_number: context.payload.pull_request.number,
