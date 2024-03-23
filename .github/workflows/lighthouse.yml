@@ -1,5 +1,9 @@
-name: CI
-on: [push]
+name: Lighthouse CI
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
 jobs:
   lhci:
     name: Lighthouse
@@ -14,9 +18,29 @@ jobs:
         run: |
           yarn install
           yarn run build
-      - name: run Lighthouse CI
+      - name: Run Lighthouse CI
         run: |
           yarn lhci autorun
-
-# Path: .github/workflows/lighthouse.yml
-# This is a basic workflow to help you get started with Actions
+      - name: Get last Lighthouse score
+        id: last_lighthouse_score
+        run: |
+          # Add the script to fetch the last Lighthouse score
+          # Example: fetch the last Lighthouse score from the merged commit
+          last_score=$(git show --no-patch --format="%s" HEAD^ | grep -oE "\[Lighthouse: [0-9]+\]" | grep -oE "[0-9]+")
+          echo "::set-output name=last_score::$last_score"
+      - name: Comment on Pull Request
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const lastScore = ${{ steps.last_lighthouse_score.outputs.last_score }};
+            const prNumber = github.context.payload.pull_request.number;
+            const owner = github.context.payload.repository.owner.login;
+            const repo = github.context.payload.repository.name;
+            github.rest.issues.createComment({
+              owner: owner,
+              repo: repo,
+              issue_number: prNumber,
+              body: `Last Lighthouse score merged into main branch: ${lastScore}`
+            });
