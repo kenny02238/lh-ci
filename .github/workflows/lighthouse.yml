@@ -41,6 +41,9 @@ jobs:
       - name: Show JSON content
         run: cat "${{ steps.get-json-filename.outputs.filename }}"
 
+      - name: Download JSON file
+        run: curl -o lighthouse_report.json "${{ steps.get-json-filename.outputs.filename }}"
+
       - name: Extract first-contentful-paint score
         id: extract-fcp-score
         run: |
