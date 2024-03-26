@@ -17,46 +17,44 @@ jobs:
 
       - name: run Lighthouse CI
         run: |
-          yarn lhci autorun --upload.target=filesystem --upload.outputDir=./test
+          yarn lhci autorun
+      # --upload.target=filesystem --upload.outputDir=./test
 
-      - name: List generated files
-        run: ls ./test
+      # - name: List generated files
+      #   run: ls ./test
 
-      - name: Get JSON filename
-        id: get-json-filename
-        run: echo "filename=$(ls ./test/*.report.json)" >> $GITHUB_OUTPUT
+      # - name: Get JSON filename
+      #   id: get-json-filename
+      #   run: echo "filename=$(ls ./test/*.report.json)" >> $GITHUB_OUTPUT
 
-      - name: Show JSON filename
-        run: echo "${{ steps.get-json-filename.outputs.filename }}"
+      # - name: Show JSON filename
+      #   run: echo "${{ steps.get-json-filename.outputs.filename }}"
 
-      - name: Show JSON content
-        run: cat "${{ steps.get-json-filename.outputs.filename }}"
+      # - name: Show JSON content
+      #   run: cat "${{ steps.get-json-filename.outputs.filename }}"
 
-      - name: Download JSON file
-        run: curl -o lighthouse_report.json "${{ steps.get-json-filename.outputs.filename }}"
+      # - name: Extract first-contentful-paint score
+      #   id: extract-fcp-score
+      #   run: |
+      #     filename=$(echo "${{ steps.get-json-filename.outputs.filename }}")
+      #     fcp_score=$(jq -r '.audits["first-contentful-paint"].score' "${filename}")
+      #     echo "::set-output name=fcp-score::${fcp_score}"
+      #     echo "FCP_SCORE=${fcp_score}" >> $GITHUB_ENV
 
-      - name: Extract first-contentful-paint score
-        id: extract-fcp-score
-        run: |
-          filename=$(echo "${{ steps.get-json-filename.outputs.filename }}")
-          fcp_score=$(jq -r '.audits["first-contentful-paint"].score' "${filename}")
-          echo "::set-output name=fcp-score::${fcp_score}"
-          echo "FCP_SCORE=${fcp_score}" >> $GITHUB_ENV
+      # - name: Show FCP score
+      #   run: echo "test ${{ steps.extract-fcp-score.outputs.fcp-score }}"
 
-      - name: Show FCP score
-        run: echo "test ${{ steps.extract-fcp-score.outputs.fcp-score }}"
-
-      - name: Add information to PR
-        uses: actions/github-script@v4
-        with:
-          github-token: ${{ secrets.TEST }}
-          script: |
-            const fcpScore = process.env["FCP_SCORE"];
-            const flameEmoji = '&#x1F525;'
-            const message = `First Contentful Paint Score:${fcpScore} ${flameEmoji} `;
-            github.issues.createComment({
-              issue_number: context.payload.pull_request.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: message
-            })
+      # - name: Add information to PR
+      #   uses: actions/github-script@v4
+      #   with:
+      #     github-token: ${{ secrets.TEST }}
+      #     script: |
+      #       const fcpScore = process.env["FCP_SCORE"];
+      #       const flameEmoji = '&#x1F525;'
+      #       const message = `First Contentful Paint Score:${fcpScore} ${flameEmoji} `;
+      #       github.issues.createComment({
+      #         issue_number: context.payload.pull_request.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: message
+      #       })
