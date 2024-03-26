@@ -26,20 +26,25 @@ jobs:
         id: get-json-filename
         run: echo "filename=$(ls ./test/*.report.json)" >> $GITHUB_OUTPUT
 
-      # - name: Show JSON filename
-      #   run: echo "${{ steps.get-json-filename.outputs.filename }}"
-      # - name: Show JSON content
-      #   run: cat "${{ steps.get-json-filename.outputs.filename }}"
+      - name: Show JSON filename
+        run: echo "${{ steps.get-json-filename.outputs.filename }}"
+
+      - name: Show JSON content
+        run: cat "${{ steps.get-json-filename.outputs.filename }}"
+
+      - name: Download JSON file
+        run: curl -o lighthouse_report.json "${{ steps.get-json-filename.outputs.filename }}"
+
       - name: Extract first-contentful-paint score
         id: extract-fcp-score
         run: |
           filename=$(echo "${{ steps.get-json-filename.outputs.filename }}")
           fcp_score=$(jq -r '.audits["first-contentful-paint"].score' "${filename}")
+          echo "::set-output name=fcp-score::${fcp_score}"
           echo "FCP_SCORE=${fcp_score}" >> $GITHUB_ENV
-        # echo "::set-output name=fcp-score::${fcp_score}"
 
-      # - name: Show FCP score
-      #   run: echo "test ${{ steps.extract-fcp-score.outputs.fcp-score }}"
+      - name: Show FCP score
+        run: echo "test ${{ steps.extract-fcp-score.outputs.fcp-score }}"
 
       - name: Add information to PR
         uses: actions/github-script@v4
