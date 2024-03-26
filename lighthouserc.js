@@ -13,7 +13,7 @@ module.exports = {
       // target: "temporary-public-storage",
       target: "lhci",
       serverBaseUrl: "http://localhost:9001",
-      token: "f5333ee7-f7d8-452e-8cda-cd736e48a15f", // build token from lhci wizard
+      token: "d2075ad3-ea93-45b6-91f5-97a44c40267d", // build token from lhci wizard
     },
     server: {
       // server options here
